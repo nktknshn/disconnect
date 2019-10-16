@@ -30,14 +30,19 @@ declare namespace UserTypes {
     condition: string;
     posted: string;
 
+    // If the authorized user is the listing owner the listing will include 
+    // the weight, format_quantity, external_id, and location keys. 
+    // If the user is authorized, the listing will contain a in_cart boolean 
+    // field indicating whether or not this listing is in their cart.
     in_cart?: boolean;
     weight?: number;
     external_id?: string;
-    location?: any;
+    location?: string;
     format_quantity?: number;
   }
 
   interface OriginalPrice {
+    converted?: OriginalPrice; // appears in marketplace
     curr_abbr: string;
     formatted: string;
     value: number;
@@ -56,7 +61,7 @@ declare namespace UserTypes {
     description: string;
     format: string;
     year: number;
-    images: any[];
+    images: Image[];
     id: number;
     stats: ReleaseStats;
     catalog_number: string;
@@ -68,6 +73,7 @@ declare namespace UserTypes {
 
   interface ReleaseStats {
     community: Community;
+    user?: Community; // appears in marketplace
   }
 
   interface Community {

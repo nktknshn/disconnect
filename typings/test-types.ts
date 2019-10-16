@@ -1,3 +1,4 @@
+
 const searchResponse: DiscogsDatabaseTypes.SearchResponse = {
   "pagination": {
     "per_page": 50,

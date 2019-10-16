@@ -2,6 +2,7 @@
 /// <reference path="./collection-types.d.ts" />
 /// <reference path="./database-types.d.ts" />
 /// <reference path="./user-types.d.ts" />
+/// <reference path="./marketplace-types.d.ts" />
 
 declare module "disconnect" {
   type Auth =
@@ -57,7 +58,7 @@ declare module "disconnect" {
     sort?: Keys;
     sort_order?: "asc" | "desc"
   }
-  
+
   type EmptyResponse = any
 
   interface Database {
@@ -109,30 +110,57 @@ declare module "disconnect" {
   }
 
   interface List {
-    getItems(): any
+    getItems(list: number, params: Object, callback: Callback<any>): Client
+    getItems(list: number, callback: Callback<any>): Client
+    getItems(list: number, params: Object): Promise<any>
+    getItems(list: number): Promise<any>
   }
 
+  type GetOrdersParams = PaginationOpts & SortingOpts<MarketplaceTypes.OrderSortKeys>
   interface Marketplace {
-    getListing(listing: number, callback: Callback<any>): Client;
-    getListing(listing: number): Promise<any>;
+    getListing(listing: number, callback: Callback<UserTypes.Listing>): Client;
+    getListing(listing: number): Promise<UserTypes.Listing>;
 
-    addListing(): Client;
-    editListing(): Client;
-    deleteListing(): Client;
-    getOrders(): Client;
-    getOrder(): Client;
-    editOrder(): Client;
-    getOrderMessages(): Client;
-    addOrderMessage(): Client;
-    getFee(): Client;
-    getPriceSuggestions(): Client
+    addListing(data: MarketplaceTypes.AddListingData, callback: Callback<MarketplaceTypes.AddListingResponse>): Client;
+    addListing(data: MarketplaceTypes.AddListingData): Promise<MarketplaceTypes.AddListingResponse>;
+
+    editListing(listing: number, data: MarketplaceTypes.EditListingData, callback: Callback<EmptyResponse>): Client;
+    editListing(listing: number, data: MarketplaceTypes.EditListingData): Promise<EmptyResponse>;
+
+    deleteListing(listing: number, callback: Callback<EmptyResponse>): Client;
+    deleteListing(listing: number): Promise<EmptyResponse>;
+
+    getOrders(params: GetOrdersParams, callback: Callback<MarketplaceTypes.GetOrdersResponse>): Client;
+    getOrders(callback: Callback<MarketplaceTypes.GetOrdersResponse>): Client;
+    getOrders(params: GetOrdersParams): Promise<MarketplaceTypes.GetOrdersResponse>;
+    getOrders(): Promise<MarketplaceTypes.GetOrdersResponse>;
+
+    getOrder(order: string, callback: Callback<MarketplaceTypes.Order>): Client;
+    getOrder(order: string): Promise<MarketplaceTypes.Order>;
+
+    editOrder(order: string, data: MarketplaceTypes.EditOrderData, callback: Callback<MarketplaceTypes.Order>): Client;
+    editOrder(order: string, data: MarketplaceTypes.EditOrderData): Promise<MarketplaceTypes.Order>;
+
+    getOrderMessages(order: string, params: PaginationOpts, callback: Callback<MarketplaceTypes.GetOrderMessages>): Client;
+    getOrderMessages(order: string, callback: Callback<MarketplaceTypes.GetOrderMessages>): Client;
+    getOrderMessages(order: string, params: PaginationOpts): Promise<MarketplaceTypes.GetOrderMessages>;
+    getOrderMessages(order: string): Promise<MarketplaceTypes.GetOrderMessages>;
+
+
+    addOrderMessage(order: string, data: Object, callback: Callback<any>): Client;
+
+    getFee(price: number, currency: string, callback: Callback<MarketplaceTypes.Fee>): Client;
+    getFee(price: number, currency: string): Promise<MarketplaceTypes.Fee>;
+
+    getPriceSuggestions(release: number, callback: Callback<MarketplaceTypes.PriceSuggestion>): Client
+    getPriceSuggestions(release: number): Promise<MarketplaceTypes.PriceSuggestion>
   }
 
   interface Wantlist {
-    getReleases(): Client;
-    addRelease(): Client;
-    editNotes(): Client;
-    removeRelease(): Client;
+    getReleases(user: string, params: Object, callback: Callback<any>): Client;
+    addRelease(user: string, release: number, data: string, callback: Callback<any>): Client;
+    editNotes(user: string, release: number, data: string, callback: Callback<any>): Client;
+    removeRelease(user: string, release: number, callback: Callback<any>): Client;
   }
 
   type GetInventoryParams = UserTypes.GetInventoryParams & SortingOpts<UserTypes.GetInventorySortingKeys> & PaginationOpts
@@ -164,7 +192,7 @@ declare module "disconnect" {
 
     getLists(user: string, params: PaginationOpts, callback: Callback<any>): Client;
     getLists(user: string, callback: Callback<any>): Client;
-    
+
     getLists(user: string, params: PaginationOpts): Promise<UserTypes.GetListsResponse>;
     getLists(user: string): Promise<UserTypes.GetListsResponse>;
 
@@ -245,13 +273,13 @@ declare module "disconnect" {
 
     setConfig(customConfig: Config): Client;
 
-    get<T>(options: string, callback: Callback<T>): Client;
-    get<T>(options: GetOptions, callback: Callback<T>): Client;
-    get<T>(options: string): Promise<T>;
-    get<T>(options: GetOptions): Promise<T>;
+    // get<T>(options: string, callback: Callback<T>): Client;
+    // get<T>(options: GetOptions, callback: Callback<T>): Client;
+    // get<T>(options: string): Promise<T>;
+    // get<T>(options: GetOptions): Promise<T>;
 
-    post(options: any, data: any, callback: any): any;
-    put(options: any, data: any, callback: any): any;
-    delete(options: any, callback: any): any;
+    // post(options: any, data: any, callback: any): any;
+    // put(options: any, data: any, callback: any): any;
+    // delete(options: any, callback: any): any;
   }
 }
