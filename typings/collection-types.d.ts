@@ -22,13 +22,17 @@ declare namespace CollectionTypes {
 
   interface ReleaseInstance {
     instance_id: number;
-    rating: number;
+    date_added: Date;
     basic_information: BasicInformation;
-    folder_id: number;
-    date_added: string;
     id: number;
+    rating: number;
+    notes?: Note[] // for the owners
   }
 
+  interface Note {
+    field_id: number;
+    value: string;
+  }
 
   interface BasicInformation {
     labels: Label[];
@@ -42,16 +46,6 @@ declare namespace CollectionTypes {
     cover_image: string;
     resource_url: string;
     master_id: number;
-
-  }
-
-  interface Label {
-    name: string;
-    entity_type: string;
-    catno: string;
-    resource_url: string;
-    id: number;
-    entity_type_name: string;
   }
 
   interface Artist {
@@ -65,10 +59,19 @@ declare namespace CollectionTypes {
   }
 
   interface Format {
-    descriptions: string[];
+    descriptions?: string[];
     name: string;
     qty: string;
     text?: string;
+  }
+
+  interface Label {
+    name: string;
+    entity_type: string;
+    catno: string;
+    resource_url: string;
+    id: number;
+    entity_type_name: string;
   }
 
   interface AddReleaseResponse {

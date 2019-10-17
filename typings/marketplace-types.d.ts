@@ -188,4 +188,9 @@ declare namespace MarketplaceTypes {
     order: MessageOrder;
   }
 
+  interface AddOrderMessageData {
+    message: string,
+    status: OrderStatus
+  }
+
 }

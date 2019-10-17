@@ -3,6 +3,8 @@
 /// <reference path="./database-types.d.ts" />
 /// <reference path="./user-types.d.ts" />
 /// <reference path="./marketplace-types.d.ts" />
+/// <reference path="./wantlist-types.d.ts" />
+/// <reference path="./lists-types.d.ts" />
 
 declare module "disconnect" {
   type Auth =
@@ -110,10 +112,10 @@ declare module "disconnect" {
   }
 
   interface List {
-    getItems(list: number, params: Object, callback: Callback<any>): Client
-    getItems(list: number, callback: Callback<any>): Client
-    getItems(list: number, params: Object): Promise<any>
-    getItems(list: number): Promise<any>
+    getItems(list: number, params: PaginationOpts, callback: Callback<ListsTypes.List>): Client
+    getItems(list: number, callback: Callback<ListsTypes.List>): Client
+    getItems(list: number, params: PaginationOpts): Promise<ListsTypes.List>
+    getItems(list: number): Promise<ListsTypes.List>
   }
 
   type GetOrdersParams = PaginationOpts & SortingOpts<MarketplaceTypes.OrderSortKeys>
@@ -146,8 +148,8 @@ declare module "disconnect" {
     getOrderMessages(order: string, params: PaginationOpts): Promise<MarketplaceTypes.GetOrderMessages>;
     getOrderMessages(order: string): Promise<MarketplaceTypes.GetOrderMessages>;
 
-
-    addOrderMessage(order: string, data: Object, callback: Callback<any>): Client;
+    addOrderMessage(order: string, data: MarketplaceTypes.AddOrderMessageData, callback: Callback<MarketplaceTypes.Message>): Client;
+    addOrderMessage(order: string, data: MarketplaceTypes.AddOrderMessageData): Promise<MarketplaceTypes.Message>;
 
     getFee(price: number, currency: string, callback: Callback<MarketplaceTypes.Fee>): Client;
     getFee(price: number, currency: string): Promise<MarketplaceTypes.Fee>;
@@ -157,10 +159,21 @@ declare module "disconnect" {
   }
 
   interface Wantlist {
-    getReleases(user: string, params: Object, callback: Callback<any>): Client;
-    addRelease(user: string, release: number, data: string, callback: Callback<any>): Client;
-    editNotes(user: string, release: number, data: string, callback: Callback<any>): Client;
-    removeRelease(user: string, release: number, callback: Callback<any>): Client;
+    getReleases(user: string, params: PaginationOpts, callback: Callback<WantlistTypes.GetWantlistResponse>): Client;
+    getReleases(user: string, callback: Callback<WantlistTypes.GetWantlistResponse>): Client;
+    getReleases(user: string, params: PaginationOpts): Promise<WantlistTypes.GetWantlistResponse>;
+    getReleases(user: string): Promise<WantlistTypes.GetWantlistResponse>;
+
+    addRelease(user: string, release: number, data: WantlistTypes.AddReleaseData, callback: Callback<WantlistTypes.Want>): Client;
+    addRelease(user: string, release: number, callback: Callback<WantlistTypes.Want>): Client;
+    addRelease(user: string, release: number, data: WantlistTypes.AddReleaseData): Promise<WantlistTypes.Want>;
+    addRelease(user: string, release: number): Promise<WantlistTypes.Want>;
+
+    editNotes(user: string, release: number, data: WantlistTypes.AddReleaseData, callback: Callback<WantlistTypes.Want>): Client;
+    editNotes(user: string, release: number, data: WantlistTypes.AddReleaseData): Promise<WantlistTypes.Want>;
+
+    removeRelease(user: string, release: number, callback: Callback<EmptyResponse>): Client;
+    removeRelease(user: string, release: number): Promise<EmptyResponse>;
   }
 
   type GetInventoryParams = UserTypes.GetInventoryParams & SortingOpts<UserTypes.GetInventorySortingKeys> & PaginationOpts
@@ -190,9 +203,8 @@ declare module "disconnect" {
     getSubmissions(user: string, callback: Callback<UserTypes.GetSubmissionsResponse>): Client;
     getSubmissions(user: string): Promise<UserTypes.GetSubmissionsResponse>;
 
-    getLists(user: string, params: PaginationOpts, callback: Callback<any>): Client;
-    getLists(user: string, callback: Callback<any>): Client;
-
+    getLists(user: string, params: PaginationOpts, callback: Callback<UserTypes.GetListsResponse>): Client;
+    getLists(user: string, callback: Callback<UserTypes.GetListsResponse>): Client;
     getLists(user: string, params: PaginationOpts): Promise<UserTypes.GetListsResponse>;
     getLists(user: string): Promise<UserTypes.GetListsResponse>;
 
@@ -219,9 +231,10 @@ declare module "disconnect" {
 
     getReleases(user: string, folder: number,
       params: SortingOpts<CollectionTypes.GetReleasesSortingKeys> & PaginationOpts, callback: Callback<CollectionTypes.ReleasesInstancesResponse>): Client
-
+    getReleases(user: string, folder: number, callback: Callback<CollectionTypes.ReleasesInstancesResponse>): Client
     getReleases(user: string, folder: number,
       params: SortingOpts<CollectionTypes.GetReleasesSortingKeys> & PaginationOpts): Promise<CollectionTypes.ReleasesInstancesResponse>
+    getReleases(user: string, folder: number): Promise<CollectionTypes.ReleasesInstancesResponse>
 
     addRelease(user: string, folder: number, release: number, callback: Callback<CollectionTypes.AddReleaseResponse>): Client
     addRelease(user: string, folder: number, release: number): Promise<CollectionTypes.AddReleaseResponse>
